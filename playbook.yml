@@ -2,7 +2,51 @@
 - name: Automatic desktop configuration
   hosts: 127.0.0.1
   connection: local
-
+  vars:
+    packages:
+      dnf:
+        - snapd
+      flatpak:
+        - io.beekeeperstudio.Studio
+        - io.podman_desktop.PodmanDesktop
+        - md.obsidian.Obsidian
+        - org.gimp.GIMP
+        - org.gnome.World.PikaBackup
+        - org.signal.Signal
+        - rest.insomnia.Insomnia
+        - sh.ppy.osu
+      snap:
+        regular:
+          - hello-world
+        classic:
+          - code
+          - node
+          - webstorm
   tasks:
-    - name: Ping current machine
-      ansible.builtin.ping:
+    - name: Install DNF packages
+      ansible.builtin.dnf:
+        name: "{{ packages.dnf }}"
+        state: latest
+      become: yes
+    - name: Install Flatpak packages
+      community.general.flatpak:
+        name: "{{ packages.flatpak }}"
+    - name: Install Snap packages
+      block:
+        - name: Install regular Snap packages
+          community.general.snap:
+            name: "{{ packages.snap.regular }}"
+          become: yes
+        - name: Configure classic Snap support and install classic Snap packages
+          block:
+            - name: Enable classic Snap support by creating a symbolic link
+              ansible.builtin.file:
+                src: /var/lib/snapd/snap
+                dest: /snap
+                state: link
+              become: yes
+            - name: Install classic Snap packages
+              community.general.snap:
+                name: "{{ packages.snap.classic }}"
+                classic: true
+              become: yes
