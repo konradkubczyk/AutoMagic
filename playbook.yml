@@ -35,6 +35,13 @@
           state: absent
           autoremove: yes
         become: yes
+    - name: Upgrade packages
+      block:
+      - name: Upgrade DNF packages
+        ansible.builtin.dnf:
+          name: "*"
+          state: latest
+        become: yes
     - name: Install packages
       block:
       - name: Install DNF packages
