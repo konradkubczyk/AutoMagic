@@ -9,7 +9,7 @@ The repository contains an Ansible playbook that will install required software 
 To execute the playbook using a single command, run the following (any `playbook.yml` file will be overwritten, if it already exists in the current directory):
 
 ```bash
-wget -O playbook.yml https://gitlab.com/konradkubczyk/automagic/-/raw/main/playbook.yml && sudo dnf -qy install ansible && ansible-playbook playbook.yml && rm playbook.yml
+wget -O playbook.yml https://gitlab.com/konradkubczyk/automagic/-/raw/main/playbook.yml && sudo dnf -y install ansible && sudo ansible-playbook playbook.yml && rm playbook.yml
 ```
 
 > After the playbook finishes, please reboot your computer or log out and log back in.
