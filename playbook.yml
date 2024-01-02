@@ -19,6 +19,13 @@
           - org.signal.Signal
           - rest.insomnia.Insomnia
           - sh.ppy.osu
+          - org.onlyoffice.desktopeditors
+          - com.obsproject.Studio
+          - org.kde.krita
+          - org.inkscape.Inkscape
+          - io.github.celluloid_player.Celluloid
+          - io.bassi.Amberol
+          - org.nickvision.tubeconverter
         snap:
           regular:
             - firefox
