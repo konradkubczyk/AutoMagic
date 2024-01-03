@@ -26,6 +26,7 @@
           - io.github.celluloid_player.Celluloid
           - io.bassi.Amberol
           - org.nickvision.tubeconverter
+          - com.valvesoftware.Steam
         snap:
           regular:
             - firefox
