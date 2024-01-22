@@ -35,47 +35,75 @@
             - node
             - webstorm
   tasks:
+    - name: Setup systemd services
+      become: yes
+      block:
+        - name: Create service files from templates
+          ansible.builtin.copy:
+            src: services/
+            dest: /etc/systemd/system/
+            owner: root
+            group: root
+            mode: 0644
+          notify: Reload systemd
+        - name: Get list of services
+          ansible.builtin.find:
+            paths: /etc/systemd/system/
+            patterns: '*.service'
+          register: systemd_services
+        - name: Enable and start services
+          ansible.builtin.systemd:
+            name: "{{ item.path | basename }}"
+            enabled: yes
+            state: started
+          loop: "{{ systemd_services.files }}"
+          ignore_errors: yes
+          notify: Reload systemd
     - name: Remove packages
       block:
-      - name: Remove DNF packages
-        ansible.builtin.dnf:
-          name: "{{ packages.to_remove.dnf }}"
-          state: absent
-          autoremove: yes
-        become: yes
+        - name: Remove DNF packages
+          ansible.builtin.dnf:
+            name: "{{ packages.to_remove.dnf }}"
+            state: absent
+            autoremove: yes
+          become: yes
     - name: Upgrade packages
       block:
-      - name: Upgrade DNF packages
-        ansible.builtin.dnf:
-          name: "*"
-          state: latest
-        become: yes
+        - name: Upgrade DNF packages
+          ansible.builtin.dnf:
+            name: "*"
+            state: latest
+          become: yes
     - name: Install packages
       block:
-      - name: Install DNF packages
-        ansible.builtin.dnf:
-          name: "{{ packages.to_install.dnf }}"
-          state: latest
-        become: yes
-      - name: Install Flatpak packages
-        community.general.flatpak:
-          name: "{{ packages.to_install.flatpak }}"
-      - name: Install Snap packages
-        block:
-          - name: Install regular Snap packages
-            community.general.snap:
-              name: "{{ packages.to_install.snap.regular }}"
-            become: yes
-          - name: Configure classic Snap support and install classic Snap packages
-            block:
-              - name: Enable classic Snap support by creating a symbolic link
-                ansible.builtin.file:
-                  src: /var/lib/snapd/snap
-                  dest: /snap
-                  state: link
-                become: yes
-              - name: Install classic Snap packages
-                community.general.snap:
-                  name: "{{ packages.to_install.snap.classic }}"
-                  classic: true
-                become: yes
+        - name: Install DNF packages
+          ansible.builtin.dnf:
+            name: "{{ packages.to_install.dnf }}"
+            state: latest
+          become: yes
+        - name: Install Flatpak packages
+          community.general.flatpak:
+            name: "{{ packages.to_install.flatpak }}"
+        - name: Install Snap packages
+          block:
+            - name: Install regular Snap packages
+              community.general.snap:
+                name: "{{ packages.to_install.snap.regular }}"
+              become: yes
+            - name: Configure classic Snap support and install classic Snap packages
+              block:
+                - name: Enable classic Snap support by creating a symbolic link
+                  ansible.builtin.file:
+                    src: /var/lib/snapd/snap
+                    dest: /snap
+                    state: link
+                  become: yes
+                - name: Install classic Snap packages
+                  community.general.snap:
+                    name: "{{ packages.to_install.snap.classic }}"
+                    classic: true
+                  become: yes
+  handlers:
+    - name: Reload systemd
+      ansible.builtin.systemd:
+        daemon_reload: yes
