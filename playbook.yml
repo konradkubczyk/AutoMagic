@@ -27,6 +27,8 @@
           - io.bassi.Amberol
           - org.nickvision.tubeconverter
           - com.valvesoftware.Steam
+          - de.haeckerfelix.Fragments
+          - de.haeckerfelix.Shortwave
         snap:
           regular:
             - firefox
