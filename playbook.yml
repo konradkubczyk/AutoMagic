@@ -36,6 +36,7 @@
             - code
             - node
             - webstorm
+            - blender
   tasks:
     - name: Setup systemd services
       become: yes
