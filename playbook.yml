@@ -36,6 +36,8 @@
             - code
             - node
             - webstorm
+            - intellij-idea-community
+            - pycharm-community
             - blender
   tasks:
     - name: Setup systemd services
