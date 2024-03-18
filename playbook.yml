@@ -11,6 +11,7 @@
         dnf:
           - snapd
         flatpak:
+          - org.mozilla.firefox
           - io.beekeeperstudio.Studio
           - io.podman_desktop.PodmanDesktop
           - md.obsidian.Obsidian
@@ -31,7 +32,6 @@
           - de.haeckerfelix.Shortwave
         snap:
           regular:
-            - firefox
           classic:
             - code
             - node
