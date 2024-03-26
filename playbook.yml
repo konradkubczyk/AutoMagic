@@ -24,10 +24,7 @@
           - com.obsproject.Studio
           - org.kde.krita
           - org.inkscape.Inkscape
-          - io.github.celluloid_player.Celluloid
-          - io.bassi.Amberol
           - org.nickvision.tubeconverter
-          - com.valvesoftware.Steam
           - de.haeckerfelix.Fragments
           - de.haeckerfelix.Shortwave
         snap:
